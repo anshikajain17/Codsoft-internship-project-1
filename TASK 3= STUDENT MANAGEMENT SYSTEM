@@ -1,0 +1,159 @@
+import java.util.*;
+
+class Student {
+    private String name;
+    private int rollNumber;
+    private String grade;
+
+    public Student(String name, int rollNumber, String grade) {
+        this.name = name;
+        this.rollNumber = rollNumber;
+        this.grade = grade;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getRollNumber() {
+        return rollNumber;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public void display() {
+        System.out.println("Name: " + name + ", Roll: " + rollNumber + ", Grade: " + grade);
+    }
+}
+
+class StudentManager {
+    private Map<Integer, Student> studentMap = new HashMap<>();
+
+    public void addStudent(Student student) {
+        if (!studentMap.containsKey(student.getRollNumber())) {
+            studentMap.put(student.getRollNumber(), student);
+            System.out.println("Student added successfully!");
+        } else {
+            System.out.println("Student with this roll number already exists.");
+        }
+    }
+
+    public void removeStudent(int roll) {
+        if (studentMap.remove(roll) != null) {
+            System.out.println("Student removed.");
+        } else {
+            System.out.println("Student not found.");
+        }
+    }
+
+    public void updateStudent(int roll, String newName, String newGrade) {
+        Student s = studentMap.get(roll);
+        if (s != null) {
+            s.setName(newName);
+            s.setGrade(newGrade);
+            System.out.println("Student updated.");
+        } else {
+            System.out.println("Student not found.");
+        }
+    }
+
+    public void searchStudent(int roll) {
+        Student s = studentMap.get(roll);
+        if (s != null) {
+            s.display();
+        } else {
+            System.out.println("Student not found.");
+        }
+    }
+
+    public void displayAllStudents() {
+        if (studentMap.isEmpty()) {
+            System.out.println("No students found.");
+        } else {
+            System.out.println("All Students:");
+            for (Student s : studentMap.values()) {
+                s.display();
+            }
+        }
+    }
+}
+
+public class StudentManagementSystem {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        StudentManager manager = new StudentManager();
+        int choice;
+
+        do {
+            System.out.println("\n--- Student Management System ---");
+            System.out.println("1. Add Student");
+            System.out.println("2. Remove Student");
+            System.out.println("3. Update Student");
+            System.out.println("4. Search Student");
+            System.out.println("5. Display All Students");
+            System.out.println("0. Exit");
+            System.out.print("Enter your choice: ");
+            choice = sc.nextInt();
+            sc.nextLine(); // consume newline
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter Name: ");
+                    String name = sc.nextLine();
+                    System.out.print("Enter Roll Number: ");
+                    int roll = sc.nextInt();
+                    sc.nextLine();
+                    System.out.print("Enter Grade: ");
+                    String grade = sc.nextLine();
+                    manager.addStudent(new Student(name, roll, grade));
+                    break;
+
+                case 2:
+                    System.out.print("Enter Roll Number to Remove: ");
+                    int rollToRemove = sc.nextInt();
+                    manager.removeStudent(rollToRemove);
+                    break;
+
+                case 3:
+                    System.out.print("Enter Roll Number to Update: ");
+                    int rollToUpdate = sc.nextInt();
+                    sc.nextLine();
+                    System.out.print("Enter New Name: ");
+                    String newName = sc.nextLine();
+                    System.out.print("Enter New Grade: ");
+                    String newGrade = sc.nextLine();
+                    manager.updateStudent(rollToUpdate, newName, newGrade);
+                    break;
+
+                case 4:
+                    System.out.print("Enter Roll Number to Search: ");
+                    int rollToSearch = sc.nextInt();
+                    manager.searchStudent(rollToSearch);
+                    break;
+
+                case 5:
+                    manager.displayAllStudents();
+                    break;
+
+                case 0:
+                    System.out.println("Exiting the system...");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice. Try again.");
+            }
+        } while (choice != 0);
+
+        sc.close();
+    }
+}
